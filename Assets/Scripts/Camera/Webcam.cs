@@ -14,6 +14,11 @@ public class WebCam : MonoBehaviour
 
     public Text debug;
 
+    void Start()
+    {
+        StartStopCam_Clicked();
+    }
+
     public void SwapCam_Clicked()
     {
         display.transform.eulerAngles = new Vector3(0f, 0f, display.transform.eulerAngles.z+180f);
