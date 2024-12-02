@@ -15,9 +15,9 @@ public class DrawRect : MonoBehaviour
         if (_openIndices.Count == 0)
         {
             var newRect = Instantiate(_rectanglePrefab, parent: transform).GetComponent<UIRectObject>();
-            
+
             _rectObjects.Add(newRect);
-            _openIndices.Add(_rectObjects.Count-1);
+            _openIndices.Add(_rectObjects.Count - 1);
         }
 
 
@@ -34,11 +34,13 @@ public class DrawRect : MonoBehaviour
 
     public void ClearRects()
     {
-        for (int i = 0; i < _rectObjects.Count; i++)
+        if (_rectObjects != null)
         {
-            _rectObjects[i].gameObject.SetActive(false);
-            _openIndices.Add(i);
+            for (int i = 0; i < _rectObjects.Count; i++)
+            {
+                _rectObjects[i].gameObject.SetActive(false);
+                _openIndices.Add(i);
+            }
         }
     }
-    
 }

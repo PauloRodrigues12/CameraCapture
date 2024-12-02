@@ -3,12 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Niantic.Lightship.AR.ObjectDetection;
+using TMPro;
 using UnityEngine;
 
 public class LogResults : MonoBehaviour
 {
     [SerializeField] private ARObjectDetectionManager _objectDetectionManager;
     [SerializeField] private float confidenceThreshold = .5f;
+    private string resultString = "";
+    public TextMeshProUGUI debugText;
     
     void Start()
     {
@@ -36,7 +39,6 @@ public class LogResults : MonoBehaviour
     private void ObjectDetectionManagerOnObjectDetectionsUpdated(ARObjectDetectionsUpdatedEventArgs obj)
     {
         // Update the object from the object detection manager
-        string resultString = "";
         var result = obj.Results;
 
         if (result == null)
@@ -60,7 +62,7 @@ public class LogResults : MonoBehaviour
             for (int j = 0; j < categories.Count; j++)
             {
                 var categoryToDisplay = categories[j];
-                resultString += $"Detected: {categoryToDisplay.CategoryName}  with confidence {categoryToDisplay.Confidence} - ";
+                resultString = $"Detected: {categoryToDisplay.CategoryName}  with confidence {categoryToDisplay.Confidence} - ";
             }
             
             Debug.Log(resultString);
@@ -69,6 +71,6 @@ public class LogResults : MonoBehaviour
 
     void Update()
     {
-        
+        debugText.text = resultString;
     }
 }
