@@ -31,9 +31,6 @@ public class ObjectDetectionSample : MonoBehaviour
 
     private Canvas _canvas;
 
-    // Resultados finais
-    [HideInInspector] public string objectDetected;
-
     private void Awake()
     {
         _canvas = FindObjectOfType<Canvas>();
@@ -92,8 +89,7 @@ public class ObjectDetectionSample : MonoBehaviour
 
             var rect = result[i].CalculateRect(w, h, Screen.orientation);
             
-            //resultString = $"{name}: {confidence}\n";
-            objectDetected = $"{name}";
+            resultString = $"{name}: {confidence}\n";
             
             drawRect.CreateRect(rect, colors[i % colors.Length], resultString);
                 
