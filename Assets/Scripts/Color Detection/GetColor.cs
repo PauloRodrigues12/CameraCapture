@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class GetColor : MonoBehaviour
 {
-    //private WebCam webcam;
+    private WebCam webcam;
     private WebCamTexture tex;
     int currentCamIndex = 0;
     //public RawImage Pic;

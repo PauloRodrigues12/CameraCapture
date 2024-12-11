@@ -16,11 +16,14 @@ public class ObjectiveController : MonoBehaviour
     public TestLocationServices locationServices;
     public LogResults objectDetectionResult;
     public GetColor getColor;
+
     public TextMeshProUGUI locationTMP;
     public TextMeshProUGUI objectTMP;
     public TextMeshProUGUI lastObjectTMP;
+
     public UnityEvent matchLocationEvent;
     public UnityEvent finishedObjectiveEvent;
+    
     private Text locationDetectedCoords; // Obter as coordenadas do código do Tó
     public bool alwaysMatchCoords; // Playtesting
     private Text objectDetectedName; // Obter a string do objeto detetado
@@ -98,7 +101,7 @@ public class ObjectiveController : MonoBehaviour
             
             //UnityEngine.Debug.Log(locationText);
 
-            if (objectDetectionResult.objectDetected == keyText && getColor.colorDetected == colorText)
+            if (objectDetectionResult.objectDetected == keyText) //&& getColor.colorDetected == colorText)
             {
                 finishedObjectiveEvent.Invoke();
                 instructionIndex = 0;
