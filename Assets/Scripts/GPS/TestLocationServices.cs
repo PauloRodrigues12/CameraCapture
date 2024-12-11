@@ -7,6 +7,9 @@ public class TestLocationServices : MonoBehaviour
 
     public TextMeshProUGUI _locationText;
 
+    // Resultados finais
+    [HideInInspector] public string locationDetected;
+
     IEnumerator Start()
     {
         // Check if the user has location service enabled.
@@ -48,9 +51,11 @@ public class TestLocationServices : MonoBehaviour
             // If the connection succeeded, continuously log the location.
             while (true)
             {
-                _locationText.text = "Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " +
-                          Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " +
-                          Input.location.lastData.timestamp;
+                //_locationText.text = "Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " +
+                          //Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " +
+                          //Input.location.lastData.timestamp;
+
+                locationDetected = Input.location.lastData.latitude + " " + Input.location.lastData.longitude;
 
              // Retrieve and log the current location
                 Debug.Log("Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " +

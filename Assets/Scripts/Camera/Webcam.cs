@@ -6,23 +6,16 @@ public class WebCam : MonoBehaviour
 {
     int currentCamIndex = 0;
 
-    private WebCamTexture tex;
+    [HideInInspector] public WebCamTexture tex = null;
 
-    public RawImage display;
+    public RawImage display = default;
 
     public Text startStopText;
 
     public Text debug;
 
-    void Start()
-    {
-        StartStopCam_Clicked();
-    }
-
     public void SwapCam_Clicked()
     {
-        display.transform.eulerAngles = new Vector3(0f, 0f, display.transform.eulerAngles.z+180f);
-        
         if (WebCamTexture.devices.Length > 0)
         {
             currentCamIndex += 1;

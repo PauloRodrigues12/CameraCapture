@@ -13,6 +13,8 @@ public class LogResults : MonoBehaviour
     private string resultString = "";
     public TextMeshProUGUI debugText;
     
+    // Resultados finais
+    [HideInInspector] public string objectDetected;
     void Start()
     {
         // Enable the object detection
@@ -63,14 +65,14 @@ public class LogResults : MonoBehaviour
             {
                 var categoryToDisplay = categories[j];
                 resultString = $"Detected: {categoryToDisplay.CategoryName}  with confidence {categoryToDisplay.Confidence} - ";
+                
+                objectDetected = $"{categoryToDisplay.CategoryName}";
             }
-            
-            Debug.Log(resultString);
         }
     }
 
     void Update()
     {
-        debugText.text = resultString;
+        //debugText.text = resultString;
     }
 }
