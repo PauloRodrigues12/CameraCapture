@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
+using Niantic.Protobuf.WellKnownTypes;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -43,7 +44,7 @@ public class ObjectiveController : MonoBehaviour
     private float[] locationCoords;
 
     private Text objectDetectedName; // Obter a string do objeto detetado
-    private int newLocation, newObject, newColor;
+    [SerializeField] private int newLocation, newObject, newColor;
     public int instructionIndex;
     [SerializedDictionary("Location", "Coordinates")]
     public SerializedDictionary<string, string> _Location;
@@ -52,6 +53,9 @@ public class ObjectiveController : MonoBehaviour
     public SerializedDictionary<string, string> _Object;
     public GameObject[] silhueta;
     public string[] color;
+    public GameObject[] colorUI;
+    public GameObject noColor;
+    [SerializeField] private string[] usingColors;
 
     void Start()
     {
@@ -90,17 +94,38 @@ public class ObjectiveController : MonoBehaviour
                 matchLocationEvent.Invoke();
 
                 newObject = UnityEngine.Random.Range(0, _Object.Count); // Valor aleatorio
-                newColor = UnityEngine.Random.Range(0, color.Length); // Valor aleatorio
 
+                string colors = _Object.Values.ToList().ElementAt(newObject);
+
+                UnityEngine.Debug.Log("This are the colors" + colors);
+
+                colors = colors.Trim();
+                usingColors = colors.Split('/');
+
+                if (usingColors[0] == "")
+                {
+                    noColor.SetActive(true);
+                    newColor = 0;
+                }
+                else newColor = UnityEngine.Random.Range(0, usingColors.Length); // Valor aleatorio
                 instructionIndex++;
             }
             else if (locationServices.locationDetected == keyText)
             {
                 matchLocationEvent.Invoke();
-                UnityEngine.Debug.Log("teste123123123");
 
                 newObject = UnityEngine.Random.Range(0, _Object.Count); // Valor aleatorio
-                newColor = UnityEngine.Random.Range(0, color.Length); // Valor aleatorio
+
+                string colors = _Object.Values.ToList().ElementAt(newObject);
+                colors = colors.Trim();
+                usingColors = colors.Split('/');
+
+                if (usingColors[0] == "")
+                {
+                    noColor.SetActive(true);
+                    newColor = 0;
+                }
+                else newColor = UnityEngine.Random.Range(0, usingColors.Length); // Valor aleatorio
 
                 instructionIndex++;
             }
@@ -119,6 +144,32 @@ public class ObjectiveController : MonoBehaviour
             }
 
             string keyText = _Object.Keys.ToList().ElementAt(newObject);
+
+            // Activate Color UI
+            if (noColor.activeSelf == false)
+            {
+                for (int i = 0; i < usingColors.Length; i++)
+                {
+                    if (i == newColor)
+                    {
+                        int pos = Int32.Parse(usingColors[i]);
+                        colorUI[pos].SetActive(true);
+                    }
+                    else 
+                    {
+                        int pos = Int32.Parse(usingColors[i]);
+                        colorUI[pos].SetActive(false);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < colorUI.Length; i++)
+                {
+                    colorUI[i].SetActive(false);
+                }
+            }
+
             if (objectTMP.enabled == true) objectTMP.text = keyText;
 
             for (int i = 0; i < silhueta.Length; i++)
@@ -126,7 +177,7 @@ public class ObjectiveController : MonoBehaviour
                 if (i == newObject)
                 {
                     silhueta[i].SetActive(true);
-                } 
+                }
                 else silhueta[i].SetActive(false);
             }
         }
@@ -140,7 +191,9 @@ public class ObjectiveController : MonoBehaviour
         {
             string keyText = _Object.Keys.ToList().ElementAt(newObject);
             if (objectTMP.enabled == true) objectTMP.text = keyText;
-            string colorText = color[newColor];
+
+            string colorText = usingColors[newColor];
+            if (noColor.activeSelf == true) colorText = null;
 
             if (lastObjectTMP.enabled == true) lastObjectTMP.text = objectDetectionResult.objectDetected;
             UnityEngine.Debug.Log(objectDetectionResult.objectDetected);
@@ -149,17 +202,23 @@ public class ObjectiveController : MonoBehaviour
 
             if (matchObjective == true)
             {
-                endMenu.SetActive(true);
-                PlayAudio(complete);
+                objectiveMatched();
             }
-            else if (objectDetectionResult.objectDetected == keyText) //&& getColor.colorDetected == colorText)
+            else if (objectDetectionResult.objectDetected == keyText && getColor.colorDetected == colorText)
             {
-                endMenu.SetActive(true);
-                PlayAudio(complete);
+                objectiveMatched();
+            }
+            else if (objectDetectionResult.objectDetected == keyText && noColor.activeSelf == true)
+            {
+                objectiveMatched();
             }
         }
     }
-
+    private void objectiveMatched()
+    {
+        endMenu.SetActive(true);
+        PlayAudio(complete);
+    }
     public void SetPassLocation(bool checkPass)
     {
         alwaysMatchCoords = checkPass;
