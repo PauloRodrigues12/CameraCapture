@@ -50,6 +50,7 @@ public class ObjectiveController : MonoBehaviour
 
     [SerializedDictionary("Object", "Colors")]
     public SerializedDictionary<string, string> _Object;
+    public GameObject[] silhueta;
     public string[] color;
 
     void Start()
@@ -119,6 +120,15 @@ public class ObjectiveController : MonoBehaviour
 
             string keyText = _Object.Keys.ToList().ElementAt(newObject);
             if (objectTMP.enabled == true) objectTMP.text = keyText;
+
+            for (int i = 0; i < silhueta.Length; i++)
+            {
+                if (i == newObject)
+                {
+                    silhueta[i].SetActive(true);
+                } 
+                else silhueta[i].SetActive(false);
+            }
         }
 
         if (timer.TimeLeft <= 0) endMenu.SetActive(true);
